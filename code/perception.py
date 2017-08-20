@@ -143,7 +143,7 @@ def perception_step(Rover):
     if np.count_nonzero(angles_samples > -0.1) > 0:
         Rover.stop_forward = 1
         Rover.throttle_set = 0.75
-        Rover.max_vel = np.mean(dist_samples[angles_samples > -0.1]) * (2 / 90)
+        Rover.max_vel = np.mean(dist_samples[angles_samples > -0.1]) * (4 / 90)
         # Rover.nav_dists = np.asarray([1000]) # ignore obstacles when going to a sample
         Rover.nav_dists = dist_obstacles + 5
         Rover.nav_angles = angles_samples[angles_samples > -0.1]
@@ -152,18 +152,18 @@ def perception_step(Rover):
         Rover.throttle_set = 0.75
         Rover.nav_dists = dist_obstacles
 
-        if (np.count_nonzero(angles[angles > -0.5]) > 50):
+        if (np.count_nonzero(angles[angles > -0.5]) > 20):
             angles_filter = angles > -0.5
-        elif (np.count_nonzero(angles[angles > -1]) > 50):
+        elif (np.count_nonzero(angles[angles > -1]) > 20):
             angles_filter = angles > -1
         else:
             angles_filter = angles != ''
 
         if (np.count_nonzero(angles_filter) > 0):
-            Rover.max_vel = np.mean(dist[angles_filter]) * (2 / 90)
+            Rover.max_vel = np.mean(dist) * (4 / 90)
             Rover.nav_angles = angles[angles_filter]
         else:
-            Rover.max_vel = np.mean(dist) * (2 / 90)
+            Rover.max_vel = np.mean(dist) * (4 / 90)
             Rover.nav_angles = angles
 
         if (Rover.pitch > 350):
