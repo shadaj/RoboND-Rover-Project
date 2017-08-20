@@ -6,7 +6,7 @@ import numpy as np
 def decision_step(Rover):
     # Stop if we are close enough to pick up a sample
     if (Rover.near_sample):
-        Rover.mode == 'stop'
+        Rover.mode = 'stop'
 
     # Check if we have vision data to make decisions with
     if Rover.nav_angles is not None:
@@ -15,6 +15,7 @@ def decision_step(Rover):
             if len(Rover.nav_angles) >= Rover.stop_forward: # Check the extent of navigable terrain
                 # Set steering to average angle clipped to the range +/- 15
                 Rover.steer = np.clip(np.mean(Rover.nav_angles * 180/np.pi), -15, 15)
+                Rover.brake = 0
 
                 # If mode is forward, navigable terrain looks good
                 # and velocity is below max, then throttle
@@ -22,10 +23,13 @@ def decision_step(Rover):
                     Rover.throttle = -1
                     Rover.mode = 'spin'
                 else:
-                    # Use proportional control for throttle setting
-                    Rover.throttle = (Rover.max_vel - Rover.vel) / 2
+                    if (Rover.max_vel < 0.2):
+                        Rover.throttle = 0
+                        Rover.brake = 10
+                    else:
+                        # Use proportional control for throttle setting
+                        Rover.throttle = (Rover.max_vel - Rover.vel) / 1.25
 
-                Rover.brake = 0
             # If there's a lack of navigable terrain pixels then go to 'spin' mode
             elif len(Rover.nav_angles) < Rover.stop_forward:
                 Rover.mode = 'spin'
