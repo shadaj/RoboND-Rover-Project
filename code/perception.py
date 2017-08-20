@@ -114,7 +114,6 @@ def perception_step(Rover):
 
     navigable_area = color_thresh(warped, (160, 160, 160))
     obstacles = np.absolute(np.float32(navigable_area) - 1) * mask
-
     samples_area = color_thresh_between(warped, (0, 105, 0), (255, 220, 65))
 
     Rover.vision_image[:,:,0] = obstacles * 255
