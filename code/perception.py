@@ -17,8 +17,7 @@ def color_thresh(img, rgb_thresh=(160, 160, 160)):
     # Return the binary image
     return color_select
 
-# Identify pixels above the threshold
-# Threshold of RGB > 160 does a nice job of identifying ground pixels only
+# Identify pixels between the bounds
 def color_thresh_between(img, low_thresh, high_thresh):
     # Create an array of zeros same xy size as img, but single channel
     color_select = np.zeros_like(img[:,:,0])
@@ -142,11 +141,11 @@ def perception_step(Rover):
             Rover.worldmap[y_world, x_world, 0] -= 5
             Rover.worldmap[y_world, x_world, 2] += 10
 
-    if (np.count_nonzero(angles_samples > -0.1) > 0):
+    if np.count_nonzero(angles_samples > -0.1) > 0:
         Rover.stop_forward = 1
         Rover.throttle_set = 0.75
         Rover.max_vel = np.mean(dist_samples[angles_samples > -0.1]) * (2 / 90)
-        Rover.nav_dists = np.asarray([1000])
+        Rover.nav_dists = np.asarray([1000]) # ignore obstacles when going to a sample
         Rover.nav_angles = angles_samples[angles_samples > -0.1]
     else:
         Rover.stop_forward = 50
