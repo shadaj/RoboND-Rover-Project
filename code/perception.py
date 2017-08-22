@@ -144,7 +144,6 @@ def perception_step(Rover):
         Rover.stop_forward = 1
         Rover.throttle_set = 0.75
         Rover.max_vel = np.mean(dist_samples[angles_samples > -0.1]) * (4 / 90)
-        # Rover.nav_dists = np.asarray([1000]) # ignore obstacles when going to a sample
         Rover.nav_dists = dist_obstacles + 5
         Rover.nav_angles = angles_samples[angles_samples > -0.1]
     else:
